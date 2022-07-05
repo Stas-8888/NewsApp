@@ -2,31 +2,21 @@ package com.example.newsapppp.ui.search
 
 import androidx.lifecycle.*
 import com.example.newsapppp.data.RetrofitRepository
-import com.example.newsapppp.db.NewsRoomDatabase
-import com.example.newsapppp.model.Article
 import com.example.newsapppp.model.NewsJson
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class SearchFragmentViewModel(database: NewsRoomDatabase): ViewModel() {
-    val repository = RetrofitRepository()
+@HiltViewModel
+class SearchFragmentViewModel  @Inject constructor(private val repository: RetrofitRepository): ViewModel() {
+
     val searchNews: MutableLiveData<Response<NewsJson>> = MutableLiveData()
     var searchNewsPage = 1
 
     fun getSearchRetrofit(searchQuery: String){
         viewModelScope.launch {
             searchNews.value = repository.searchNews(searchQuery,searchNewsPage)
-        }
-    }
-
-    class MainViewModelFactory(val database: NewsRoomDatabase) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SearchFragmentViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return SearchFragmentViewModel(database) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModelClass")
         }
     }
 }

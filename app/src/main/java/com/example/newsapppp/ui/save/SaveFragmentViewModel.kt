@@ -2,35 +2,28 @@ package com.example.newsapppp.ui.save
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.newsapppp.data.RetrofitRepository
 import com.example.newsapppp.db.NewsDao
-import com.example.newsapppp.db.NewsRoomDatabase
 import com.example.newsapppp.model.Article
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SaveFragmentViewModel(var dao: NewsDao): ViewModel() {
+@HiltViewModel
+class SaveFragmentViewModel  @Inject constructor(private val repository: RetrofitRepository): ViewModel() {
 
     fun getAllNews(): LiveData<List<Article>> {
-        return dao.getAllArticles()
+        return repository.getAllArticles()
     }
 
     fun delete(article: Article) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteArticle(article)
+            repository.delete(article)
         }
     }
     fun deleteAll() = viewModelScope.launch (Dispatchers.IO){
-        dao.deleteAll()
-    }
-    class MainViewModelFactory(val dao: NewsDao) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SaveFragmentViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return SaveFragmentViewModel(dao) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModelClass")
-        }
+        repository.deleteAll()
     }
 }

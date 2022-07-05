@@ -6,27 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsapppp.Application
 import com.example.newsapppp.R
-import com.example.newsapppp.SEARCH_NEWS_TIME_DELAY
-import com.example.newsapppp.ui.adapters.NewsAdapter
 import com.example.newsapppp.databinding.FragmentSearchBinding
+import com.example.newsapppp.ui.adapters.NewsAdapter
+import com.example.newsapppp.utils.SEARCH_NEWS_TIME_DELAY
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
-    lateinit var binding: FragmentSearchBinding
-    val adapter by lazy { NewsAdapter() }
-
-    private val viewModel: SearchFragmentViewModel by activityViewModels {
-        SearchFragmentViewModel.MainViewModelFactory((context?.applicationContext as Application).database)
-    }
+    private lateinit var binding: FragmentSearchBinding
+    private val adapter by lazy { NewsAdapter() }
+    private val viewModel by viewModels<SearchFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +41,7 @@ class SearchFragment : Fragment() {
         setupRecyclerView()
         adapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article", it)
+                putParcelable("article", it)
             }
             findNavController().navigate(
                 R.id.action_searchFragment_to_newsFragment,

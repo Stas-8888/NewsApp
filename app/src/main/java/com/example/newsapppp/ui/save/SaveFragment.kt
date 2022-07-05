@@ -2,29 +2,25 @@ package com.example.newsapppp.ui.save
 
 import android.os.Bundle
 import android.view.*
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.newsapppp.Application
 import com.example.newsapppp.R
-import com.example.newsapppp.ui.adapters.NewsAdapter
 import com.example.newsapppp.databinding.FragmentSaveBinding
 import com.example.newsapppp.dialog.DeleteDialog
+import com.example.newsapppp.ui.adapters.NewsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_save.*
 
+@AndroidEntryPoint
 class SaveFragment : Fragment() {
-    lateinit var binding: FragmentSaveBinding
-    val adapter by lazy { NewsAdapter() }
-
-    private val viewModel: SaveFragmentViewModel by activityViewModels {
-        SaveFragmentViewModel.MainViewModelFactory((context?.applicationContext as Application).daoNews)
-    }
+    private lateinit var binding: FragmentSaveBinding
+    private val adapter by lazy { NewsAdapter() }
+    private val viewModel by viewModels<SaveFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +38,7 @@ class SaveFragment : Fragment() {
 
         adapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article", it)
+                putParcelable("article", it)
             }
             findNavController().navigate(R.id.action_saveFragment_to_newsFragment, bundle)
         }
@@ -62,13 +58,15 @@ class SaveFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val article = adapter.listNews[position]
-                DeleteDialog.showDialog(
-                    context as AppCompatActivity,
-                    object : DeleteDialog.Listener {
-                        override fun onClick() {
-                            viewModel.delete(article)
-                        }
-                    })
+                viewModel.delete(article)
+
+//                DeleteDialog.showDialog(
+//                    context as AppCompatActivity,
+//                    object : DeleteDialog.Listener {
+//                        override fun onClick() {
+//                            viewModel.delete(article)
+//                        }
+//                    })
             }
         }
 
@@ -98,7 +96,7 @@ class SaveFragment : Fragment() {
     }
 
     private fun deleteAllNotes() {
-        DeleteDialog.showDialog(context as AppCompatActivity, object : DeleteDialog.Listener {
+           DeleteDialog.showDialog(context as AppCompatActivity, object : DeleteDialog.Listener {
             override fun onClick() {
                 viewModel.deleteAll()
             }

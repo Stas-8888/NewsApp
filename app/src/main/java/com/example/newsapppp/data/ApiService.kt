@@ -1,6 +1,6 @@
 package com.example.newsapppp.data
 
-import com.example.newsapppp.API_KEY
+import com.example.newsapppp.utils.API_KEY
 import com.example.newsapppp.model.NewsJson
 import retrofit2.Response
 import retrofit2.http.GET

@@ -5,7 +5,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import com.example.newsapppp.databinding.DeleteDialogBinding
 
+
 object DeleteDialog {
+
     fun showDialog(context: Context, listener: Listener) {
         var dialog: AlertDialog? = null
         val builder = AlertDialog.Builder(context)

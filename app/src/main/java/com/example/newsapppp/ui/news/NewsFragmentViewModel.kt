@@ -1,29 +1,22 @@
 package com.example.newsapppp.ui.news
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.newsapppp.data.RetrofitRepository
 import com.example.newsapppp.db.NewsRoomDatabase
 import com.example.newsapppp.model.Article
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsFragmentViewModel(database: NewsRoomDatabase): ViewModel() {
-    val dao = database.getNewsDao()
+@HiltViewModel
+class NewsFragmentViewModel  @Inject constructor(private val repository: RetrofitRepository): ViewModel() {
+
 
     fun insert(article: Article) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.insert(article)
-        }
-    }
-
-    class MainViewModelFactory(val database: NewsRoomDatabase) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return NewsFragmentViewModel(database) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModelClass")
+            repository.insert(article)
         }
     }
 }

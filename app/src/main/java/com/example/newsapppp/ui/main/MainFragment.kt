@@ -2,25 +2,20 @@ package com.example.newsapppp.ui.main
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsapppp.Application
 import com.example.newsapppp.R
-import com.example.newsapppp.ui.adapters.NewsAdapter
 import com.example.newsapppp.databinding.FragmentMainBinding
-import com.example.newsapppp.dialog.DeleteDialog
+import com.example.newsapppp.ui.adapters.NewsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainFragment : Fragment() {
-    lateinit var binding: FragmentMainBinding
-
+    private lateinit var binding: FragmentMainBinding
     private val adapter by lazy { NewsAdapter() }
-    private val viewModel: MainFragmentViewModel by activityViewModels {
-        MainFragmentViewModel.MainViewModelFactory((context?.applicationContext as Application).database)
-    }
+    private val viewModel by viewModels<MainFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +30,10 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setHasOptionsMenu(true)
+
         adapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article", it)
+                putParcelable("article", it)
             }
             findNavController().navigate(R.id.action_mainFragment_to_newsFragment, bundle)
         }
@@ -52,22 +48,15 @@ class MainFragment : Fragment() {
             adapter.setList(it.body()!!.articles)
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.account_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_account) {
-            deleteAllNotes()
+
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun deleteAllNotes() {
-        DeleteDialog.showDialog(context as AppCompatActivity, object : DeleteDialog.Listener {
-            override fun onClick() {
-//                viewModel.deleteAll()
-            }
-        })
     }
 }
