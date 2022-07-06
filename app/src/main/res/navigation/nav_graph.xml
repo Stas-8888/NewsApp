@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.newsapppp.ui.main.MainFragment"
+        android:name="com.example.newsapppp.presentation.ui.main.MainFragment"
         android:label="Daily News"
         tools:layout="@layout/fragment_main">
         <action
@@ -20,16 +20,16 @@
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
-        android:name="com.example.newsapppp.ui.news.NewsFragment"
+        android:name="com.example.newsapppp.presentation.ui.news.NewsFragment"
         android:label="Daily News"
         tools:layout="@layout/fragment_news">
         <argument
             android:name="article"
-            app:argType="com.example.newsapppp.model.Article" />
+            app:argType="com.example.newsapppp.data.model.Article" />
     </fragment>
     <fragment
         android:id="@+id/saveFragment"
-        android:name="com.example.newsapppp.ui.save.SaveFragment"
+        android:name="com.example.newsapppp.presentation.ui.save.SaveFragment"
         android:label="Мои Новости"
         tools:layout="@layout/fragment_save">
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.newsapppp.ui.search.SearchFragment"
+        android:name="com.example.newsapppp.presentation.ui.search.SearchFragment"
         android:label="Поиск Новостей"
         tools:layout="@layout/fragment_search">
         <action
