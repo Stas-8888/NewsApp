@@ -2,7 +2,6 @@ package com.example.newsapppp.presentation.ui.save
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -11,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapppp.R
 import com.example.newsapppp.databinding.FragmentSaveBinding
-import com.example.newsapppp.presentation.dialog.DeleteDialog
 import com.example.newsapppp.presentation.ui.adapters.NewsAdapter
+import com.example.newsapppp.presentation.utils.showDeleteDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_save.*
 
@@ -37,10 +36,7 @@ class SaveFragment : Fragment() {
         setHasOptionsMenu(true)
 
         adapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putParcelable("article", it)
-            }
-            findNavController().navigate(R.id.action_saveFragment_to_newsFragment, bundle)
+            findNavController().navigate(SaveFragmentDirections.actionSaveFragmentToNewsFragment(it))
         }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
@@ -58,15 +54,8 @@ class SaveFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val article = adapter.listNews[position]
-                viewModel.delete(article)
 
-//                DeleteDialog.showDialog(
-//                    context as AppCompatActivity,
-//                    object : DeleteDialog.Listener {
-//                        override fun onClick() {
-//                            viewModel.delete(article)
-//                        }
-//                    })
+                showDeleteDialog { viewModel.delete(article) }
             }
         }
 
@@ -74,9 +63,14 @@ class SaveFragment : Fragment() {
             attachToRecyclerView(rvSavedNews)
         }
 
-        viewModel.getAllNews().observe(viewLifecycleOwner) { articles ->
-            adapter.setList(articles)
+        viewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
+                is SaveState.SetArticles -> {
+                    adapter.setList(it.articles)
+                }
+            }
         }
+        viewModel.getAllNews()
     }
 
     private fun setupRecyclerView() {
@@ -96,10 +90,6 @@ class SaveFragment : Fragment() {
     }
 
     private fun deleteAllNotes() {
-           DeleteDialog.showDialog(context as AppCompatActivity, object : DeleteDialog.Listener {
-            override fun onClick() {
-                viewModel.deleteAll()
-            }
-        })
+        showDeleteDialog { viewModel.deleteAll() }
     }
 }

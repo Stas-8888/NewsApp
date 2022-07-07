@@ -61,8 +61,8 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-        viewModel.searchNews.observe(viewLifecycleOwner) { response ->
-                        adapter.setList(response.body()!!.articles)
+        viewModel.searchNews.observe(viewLifecycleOwner) { articles ->
+                        adapter.setList(articles)
         }
     }
 

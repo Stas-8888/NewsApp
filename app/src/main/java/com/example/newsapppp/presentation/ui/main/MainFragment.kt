@@ -20,7 +20,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -31,20 +31,19 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
 
         adapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putParcelable("article", it)
-            }
-            findNavController().navigate(R.id.action_mainFragment_to_newsFragment, bundle)
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewsFragment(it))
         }
     }
 
     private fun setupRecyclerView() {
         viewModel.getNewsRetrofit()
-        binding.rvNews.adapter = adapter
-        binding.rvNews.layoutManager = LinearLayoutManager(requireContext())
+        with(binding) {
+            rvNews.adapter = adapter
+            rvNews.layoutManager = LinearLayoutManager(requireContext())
+        }
 
-        viewModel.myNews.observe(viewLifecycleOwner){
-            adapter.setList(it.body()!!.articles)
+        viewModel.myNews.observe(viewLifecycleOwner) {
+            adapter.setList(it)
         }
     }
 
