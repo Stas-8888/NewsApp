@@ -17,6 +17,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
@@ -25,7 +28,7 @@
         tools:layout="@layout/fragment_news">
         <argument
             android:name="article"
-            app:argType="com.example.newsapppp.data.model.Article" />
+            app:argType="com.example.newsapppp.presentation.model.ArticleModel" />
     </fragment>
     <fragment
         android:id="@+id/saveFragment"
@@ -48,6 +51,18 @@
         <action
             android:id="@+id/action_searchFragment_to_newsFragment"
             app:destination="@id/newsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.newsapppp.presentation.ui.settings.SettingsFragment"
+        android:label="Настройки">
+        <action
+            android:id="@+id/action_settingsFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

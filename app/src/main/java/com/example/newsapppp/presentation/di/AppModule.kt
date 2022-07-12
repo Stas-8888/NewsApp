@@ -6,13 +6,12 @@ import com.example.newsapppp.data.db.NewsDao
 import com.example.newsapppp.data.db.NewsRoomDatabase
 import com.example.newsapppp.data.retrofit.ApiService
 import com.example.newsapppp.data.utils.BASE_URL
+import com.example.newsapppp.presentation.mapper.ArticleMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -43,7 +42,10 @@ object AppModule {
         ).build()
 
     @Provides
-    fun provideArticleDao(appDatabase: NewsRoomDatabase):NewsDao {
+    fun provideArticleDao(appDatabase: NewsRoomDatabase): NewsDao {
         return appDatabase.getNewsDao()
     }
+    @Provides
+    @Singleton
+    fun provideArticleMapper(): ArticleMapper = ArticleMapper()
 }

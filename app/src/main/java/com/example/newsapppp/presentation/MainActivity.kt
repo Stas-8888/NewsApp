@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.mainFragment -> {
                     navController.navigate(R.id.mainFragment)
                 }
+
                 R.id.saveFragment -> {
                     navController.navigate(R.id.saveFragment)
                 }

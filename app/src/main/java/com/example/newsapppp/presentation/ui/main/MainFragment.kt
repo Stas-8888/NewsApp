@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val adapter by lazy { NewsAdapter() }
+    private val newsAdapter by lazy { NewsAdapter() }
     private val viewModel by viewModels<MainFragmentViewModel>()
 
     override fun onCreateView(
@@ -30,21 +30,20 @@ class MainFragment : Fragment() {
         setupRecyclerView()
         setHasOptionsMenu(true)
 
-        adapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putParcelable("article", it)
-            }
-            findNavController().navigate(R.id.action_mainFragment_to_newsFragment, bundle)
+        viewModel.getNewsRetrofit()
+        viewModel.myNews.observe(viewLifecycleOwner) {
+            newsAdapter.setList(it)
+        }
+
+        newsAdapter.setOnItemClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewsFragment(it))
         }
     }
 
-    private fun setupRecyclerView() {
-        viewModel.getNewsRetrofit()
-        binding.rvNews.adapter = adapter
-        binding.rvNews.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.myNews.observe(viewLifecycleOwner){
-            adapter.setList(it.body()!!.articles)
+    private fun setupRecyclerView() = with(binding) {
+        rvNews.apply {
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -54,6 +53,7 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_account) {
+            findNavController().navigate(R.id.settingsFragment)
         }
         return super.onOptionsItemSelected(item)
     }

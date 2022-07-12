@@ -17,4 +17,15 @@
     <color name="colorTextSubtitle">#4e4e4e</color>
     <color name="colorTextTitle">#262626</color>
     <color name="colorMain">#00BCD4</color>
-</resources>
+
+    <!--colors for dark mode-->
+    <color name="contentBodyColor">#000</color>
+    <color name="contentTextColor">#fff</color>
+    <color name="miniTitle">#fff</color>
+
+    <color name="imageBorderColor">#E01E7A</color>
+
+    <color name="RedColor">#FF5722</color>
+
+
+    </resources>

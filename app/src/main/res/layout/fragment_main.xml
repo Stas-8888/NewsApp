@@ -7,18 +7,6 @@
     android:background="#FAF8F8"
     tools:context=".presentation.ui.main.MainFragment">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:background="@color/colorRed"-->
-<!--        app:title="Daily News"-->
-<!--        app:titleTextColor="@color/white"-->
-<!--        app:titleMarginStart="150dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"

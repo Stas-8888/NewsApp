@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapppp.R
 import com.example.newsapppp.databinding.FragmentSearchBinding
 import com.example.newsapppp.presentation.ui.adapters.NewsAdapter
+import com.example.newsapppp.presentation.ui.save.SaveFragmentDirections
 import com.example.newsapppp.presentation.utils.SEARCH_NEWS_TIME_DELAY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -40,13 +41,7 @@ class SearchFragment : Fragment() {
 
         setupRecyclerView()
         adapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putParcelable("article", it)
-            }
-            findNavController().navigate(
-                R.id.action_searchFragment_to_newsFragment,
-                bundle
-            )
+            findNavController().navigate(SaveFragmentDirections.actionSaveFragmentToNewsFragment(it))
         }
 
         var job: Job? = null
@@ -62,7 +57,7 @@ class SearchFragment : Fragment() {
             }
         }
         viewModel.searchNews.observe(viewLifecycleOwner) { response ->
-                        adapter.setList(response.body()!!.articles)
+                        adapter.setList(response)
         }
     }
 
