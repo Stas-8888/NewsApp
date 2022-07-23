@@ -12,20 +12,19 @@
     <color name="colorPrimaryDark">#cf2a2d</color>
     <color name="colorRed">#E30105</color>
     <color name="colorAccent">#1e344b</color>
-
-    <color name="colorBackground">#f9f9fa</color>
+<!--    #f9f9fa -->
+    <color name="colorBackground">@color/white</color>
+    <color name="colorcardview">#FFFFFFFF</color>
+    <color name="colorTabLayout">@color/colorBackground</color>
+    <color name="tabTextColor">#858585</color>
+    <color name="tabIndicatorColor">@color/colorPrimaryDark</color>
     <color name="colorTextSubtitle">#4e4e4e</color>
     <color name="colorTextTitle">#262626</color>
     <color name="colorMain">#00BCD4</color>
 
-    <!--colors for dark mode-->
-    <color name="contentBodyColor">#000</color>
-    <color name="contentTextColor">#fff</color>
-    <color name="miniTitle">#fff</color>
-
-    <color name="imageBorderColor">#E01E7A</color>
-
     <color name="RedColor">#FF5722</color>
-
+    <color name="g_line_color">#22858EAC</color>
+    <color name="blackLight">#2a2a2a</color>
+    <color name="grayDark">#707070</color>
 
     </resources>

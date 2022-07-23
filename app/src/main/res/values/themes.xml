@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.NewsApppp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.NewsApppp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorRed</item>
         <item name="colorPrimaryVariant">@color/colorRed</item>
@@ -13,50 +13,15 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
 
-
-        <item name="colorPrimaryDark">#00BCD4</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <!-- navigation icon colorModel -->
+        <item name="colorControlNormal">@color/white</item>
+        <!-- colorModel of the menu overflow icon -->
+        <item name="android:textColorSecondary">@color/white</item>
+        <!-- toolbar title colorModel -->
+        <item name="titleTextColor">@color/white</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <!--styles for education app-->
-    <style name="viewParent">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="viewParent.headerText">
-        <item name="android:textColor">@color/contentBodyColor</item>
-<!--        <item name="android:textSize">@dimen/headerTextSize</item>-->
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="viewParent.headerText.settingsMiniTitle">
-        <item name="android:textColor">@color/colorTextSubtitle</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:layout_marginTop">20dp</item>
-    </style>
-
-    <style name="settingsText" parent="viewParent.headerText.settingsMiniTitle">
-        <item name="android:textColor">@color/contentBodyColor</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:drawablePadding">20dp</item>
-    </style>
-    <style name="viewParent.headerText.settingsTextIcon" parent="settingsText">
-        <item name="android:drawableRight">@drawable/ic_more</item>
-    </style>
 </resources>

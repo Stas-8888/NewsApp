@@ -1,38 +1,44 @@
 package com.example.newsapppp.presentation.ui.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapppp.R
 import com.example.newsapppp.databinding.FragmentMainBinding
 import com.example.newsapppp.presentation.ui.adapters.NewsAdapter
+import com.example.newsapppp.presentation.ui.base.BaseFragment
+import com.example.newsapppp.presentation.utils.Resource
+import com.example.newsapppp.presentation.utils.USA
+import com.example.newsapppp.presentation.utils.categories
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_main.*
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
-    private lateinit var binding: FragmentMainBinding
+class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
     private val newsAdapter by lazy { NewsAdapter() }
-    private val viewModel by viewModels<MainFragmentViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMainBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    private lateinit var sharedPref: SharedPreferences
+    override val viewModel by viewModels<MainFragmentViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setHasOptionsMenu(true)
 
-        viewModel.getNewsRetrofit()
-        viewModel.myNews.observe(viewLifecycleOwner) {
-            newsAdapter.setList(it)
+        sharedPreferencesSaveCountryAndCategory()
+        showNews()
+
+        btProfile.setOnClickListener {
+            findNavController().navigate(R.id.settingsFragment)
         }
 
         newsAdapter.setOnItemClickListener {
@@ -44,17 +50,67 @@ class MainFragment : Fragment() {
         rvNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            startLayoutAnimation()
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.account_menu, menu)
+
+
+    fun sharedPreferencesSaveCountryAndCategory(){
+        sharedPref = requireActivity().getSharedPreferences("Table", Context.MODE_PRIVATE)
+        val country = sharedPref.getString("country",USA)!!
+        viewModel.getNews(countryCode = country,category = categories[0])
+        tvCountry.text = country
+
+        binding.tabMain.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+//
+                viewModel.getNews(countryCode = country,categories[tab!!.position])
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_account) {
-            findNavController().navigate(R.id.settingsFragment)
+
+
+
+    fun showNews(){
+        viewModel.newsResponse.observe(viewLifecycleOwner){
+            when(it){
+                is Resource.Success ->{
+                    hideProgressBar()
+                    it.data?.let {
+                        newsAdapter.setList(it.articles)
+                    }
+                }
+                is Resource.Error ->{
+                    hideProgressBar()
+                    it.data?.let {
+
+                        Log.e("checkData", "MainFragment: error:${it}")
+                    }
+                }
+                is Resource.Loading ->{
+                    showProgressBar()
+                }
+            }
         }
-        return super.onOptionsItemSelected(item)
     }
+
+    private fun hideProgressBar() {
+        progress_bar.visibility = View.INVISIBLE
+        tvCenterText.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        progress_bar.visibility = View.VISIBLE
+        tvCenterText.visibility = View.VISIBLE
+    }
+
+    override fun getViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentMainBinding.inflate(inflater, container, false)
+
 }

@@ -2,8 +2,10 @@ package com.example.newsapppp.presentation.ui.save
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,10 +37,19 @@ class SaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setHasOptionsMenu(true)
+        btDeleteAll.setOnClickListener{
+            deleteAllNotes()
+        }
+
+        if (rvSavedNews.isEmpty()) {
+            tvBackgroundText.visibility = View.VISIBLE
+
+        } else {
+            tvBackgroundText.visibility = View.GONE
+        }
 
         newsAdapter.setOnItemClickListener {
             findNavController().navigate(SaveFragmentDirections.actionSaveFragmentToNewsFragment(it))
-
         }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
@@ -53,10 +64,12 @@ class SaveFragment : Fragment() {
                 return true
             }
 
+            override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder) = 0.3f
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val article = newsAdapter.listNews[position]
-                showDeleteDialog { viewModel.delete(article) }
+                showDeleteDialog({ viewModel.delete(article) }, { newsAdapter.notifyDataSetChanged() })
             }
         }
 
@@ -64,15 +77,22 @@ class SaveFragment : Fragment() {
             attachToRecyclerView(rvSavedNews)
         }
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
-                is SaveState.SetArticles -> {
-                    newsAdapter.setList(it.articles)
-                }
+        lifecycleScope.launchWhenCreated {
+            viewModel.state.collect {
+                newsAdapter.setList(it)
+                viewModel.getAllNews()
             }
         }
-        viewModel.getAllNews()
     }
+//        viewModel.state.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is SaveState.SetArticles -> {
+//                    newsAdapter.setList(it.articles)
+//                }
+//            }
+//        }
+//        viewModel.getAllNews()
+//    }
 
     private fun setupRecyclerView() = with(binding) {
         rvSavedNews.apply {
@@ -81,19 +101,7 @@ class SaveFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.dellete, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete) {
-            deleteAllNotes()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun deleteAllNotes() {
-        showDeleteDialog { viewModel.deleteAll() }
-
+        showDeleteDialog({ viewModel.deleteAll() }, { })
     }
 }

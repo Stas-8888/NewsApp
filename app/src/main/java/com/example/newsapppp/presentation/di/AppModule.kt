@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.example.newsapppp.data.db.NewsDao
 import com.example.newsapppp.data.db.NewsRoomDatabase
+import com.example.newsapppp.data.repository.NewsRepository
 import com.example.newsapppp.data.retrofit.ApiService
 import com.example.newsapppp.data.utils.BASE_URL
-import com.example.newsapppp.presentation.mapper.ArticleMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,7 +45,13 @@ object AppModule {
     fun provideArticleDao(appDatabase: NewsRoomDatabase): NewsDao {
         return appDatabase.getNewsDao()
     }
-    @Provides
-    @Singleton
-    fun provideArticleMapper(): ArticleMapper = ArticleMapper()
+
+//    @Provides
+//    fun provideNewsRepository(apiService: ApiService, newsDao: NewsDao): NewsRepository {
+//        return NewsRepository(apiService,newsDao)
+//    }
+
+//    @Provides
+//    @Singleton
+//    fun provideArticleMapper(): ArticleMapper = ArticleMapper()
 }

@@ -1,8 +1,6 @@
 package com.example.newsapppp.presentation.ui.news
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,7 +56,7 @@ class NewsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initi() {
         val article = args.article
-        val valueBool = SaveShared.getFavorite(requireContext(), article.id.toString())
+
 
         webView.apply {
             webView.webViewClient = WebViewClient()
@@ -67,7 +65,7 @@ class NewsFragment : Fragment() {
             settings.safeBrowsingEnabled = true
         }
 
-
+        val valueBool = SaveShared.getFavorite(requireContext(), article.id.toString())
         if (isFavorite != valueBool) {
             binding.btFavorite.setImageResource(R.drawable.ic_favorite)
         } else {

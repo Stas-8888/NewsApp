@@ -28,7 +28,7 @@
         tools:layout="@layout/fragment_news">
         <argument
             android:name="article"
-            app:argType="com.example.newsapppp.presentation.model.ArticleModel" />
+            app:argType="com.example.newsapppp.data.model.Article" />
     </fragment>
     <fragment
         android:id="@+id/saveFragment"
@@ -68,4 +68,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.newsapppp.presentation.ui.splash.SplashFragment"
+        android:label="SplashFragment" />
 </navigation>

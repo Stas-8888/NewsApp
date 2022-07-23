@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsapppp.R
 import com.example.newsapppp.databinding.FragmentSearchBinding
 import com.example.newsapppp.presentation.ui.adapters.NewsAdapter
 import com.example.newsapppp.presentation.ui.save.SaveFragmentDirections
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private val adapter by lazy { NewsAdapter() }
+    private val newsAdapter by lazy { NewsAdapter() }
     private val viewModel by viewModels<SearchFragmentViewModel>()
 
     override fun onCreateView(
@@ -40,7 +39,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        adapter.setOnItemClickListener {
+        newsAdapter.setOnItemClickListener {
             findNavController().navigate(SaveFragmentDirections.actionSaveFragmentToNewsFragment(it))
         }
 
@@ -57,12 +56,14 @@ class SearchFragment : Fragment() {
             }
         }
         viewModel.searchNews.observe(viewLifecycleOwner) { response ->
-                        adapter.setList(response)
+                        newsAdapter.setList(response)
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.rvSearchNews.adapter = adapter
-        binding.rvSearchNews.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecyclerView()= with(binding) {
+        rvSearchNews.apply {
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 }

@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.newsapppp">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".presentation.app.App"
@@ -16,13 +17,18 @@
         android:theme="@style/Theme.NewsApppp"
         tools:targetApi="31">
         <activity
-            android:name="com.example.newsapppp.presentation.MainActivity"
-            android:exported="true">
+            android:name=".presentation.SplashActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.MainActivity"
+            android:exported="false">
+
         </activity>
     </application>
 
